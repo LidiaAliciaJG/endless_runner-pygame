@@ -34,6 +34,20 @@ caminaIzquierda = [pygame.image.load('imagenes/sprite_chica12.png'),
 
 salta = [pygame.image.load('imagenes/sprite_chica01.png')] #sprite_chica05.png
 
+#MÚSICA DE FONDO
+pygame.mixer.music.load('sonido/A_Dogs_Life-FiftySounds.mp3') 
+pygame.mixer.music.play(-1) 
+#pygame.mixer.music.set_volume(0.5)
+#Referencia de canción: Obra: La Vida de un Perro / Música de https://www.fiftysounds.com/es/
+
+#IMAGENES PARA VOLUMEN DE SONIDO
+sonido_subir = pygame.image.load('sonido/medio.png')
+sonido_bajar = pygame.image.load('sonido/bajo.png')
+sonido_mute = pygame.image.load('sonido/mute.png')
+sonido_max = pygame.image.load('sonido/alto.png')
+#Referencia de íconos: <a target="_blank" href="https://icons8.com/icon/46657/volumen-bajo">Volumen bajo</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+
 #Variables
 x = 0
 px = 50 #posición en x del personaje
@@ -109,6 +123,32 @@ while ejecuta:
 	#Opción de tecla pulsada
 	keys = pygame.key.get_pressed()
 
+	#VOLUMEN DE MUSICA
+	#Bajar volumen: tecla 9
+	if keys[pygame.K_9] and pygame.mixer.music.get_volume() > 0.0: 
+		pygame.mixer.music.set_volume(pygame.mixer.music.get_volume() - 0.01) 
+		screen.blit(sonido_bajar, (850, 25)) 
+	elif keys[pygame.K_9] and pygame.mixer.music.get_volume() == 0.0:
+		screen.blit(sonido_mute, (850, 25))
+
+	#Subir volumen
+	if keys[pygame.K_0] and pygame.mixer.music.get_volume() < 1.0: 
+		pygame.mixer.music.set_volume(pygame.mixer.music.get_volume() + 0.01)
+		screen.blit(sonido_subir, (850, 25))
+	elif keys [pygame.K_0] and pygame.mixer.music.get_volume() == 1.0:
+			screen.blit(sonido_max, (850, 25)) 
+
+	#Mutear sonido
+	elif keys[pygame.K_m]:
+		pygame.mixer.music.set_volume(0.0) 
+		screen.blit(sonido_mute, (850, 25))
+
+	#Reactivar sonido en maximo
+	elif keys[pygame.K_COMMA]:
+		pygame.mixer.music.set_volume(1.0)
+		screen.blit(sonido_max, (850, 25))
+
+	#MOVIMIENTO DEL PERSONAJE
 	#Movimiento a la izquierda: Tecla A
 	if keys[pygame.K_a] and px > velocidad:
 		px -= velocidad
@@ -144,7 +184,7 @@ while ejecuta:
 
 	#ACTUALIZACIÓN DE VENTANA
 	pygame.display.update()
-	#Llamada a la función creada
+	#Llamada a la función de actualización de la ventana
 	recarga_pantalla()
 
 #CIERRE DEL JUEGO
